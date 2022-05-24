@@ -45,4 +45,15 @@ describe('describe test', () => {
             assert(e);
         }
     })
+
+    it('yeah only me or manager can call this' , async () => {
+        try{
+            await lottery.methods.pickWinner().send({
+                from: accounts[1]
+            })
+            assert(false);
+        }catch(errrr){
+            assert(errrr);
+        }
+    })
 })
