@@ -75,4 +75,43 @@ describe('describe test', () => {
 
         assert(difference > web3.utils.toWei('1.8', 'ether'));
     })
+
+    it('checking empty array after the end of the lottery', async () => {
+
+        await lottery.methods.enter().send({
+            from:accounts[0],
+            value: web3.utils.toWei('2', 'ether')
+        })
+
+        await lottery.methods.enter().send({
+            from:accounts[1],
+            value: web3.utils.toWei('2', 'ether')
+        })
+
+        await lottery.methods.enter().send({
+            from:accounts[2],
+            value: web3.utils.toWei('2', 'ether')
+        })
+
+        let playersLength  = await lottery.methods.getPlayers().call({
+            from: accounts[0]
+        });
+        if(playersLength.length == 0){
+            assert(false);
+        }
+
+        await lottery.methods.pickWinner().send({
+            from: accounts[0]
+        })
+
+        playersLength  = await lottery.methods.getPlayers().call({
+            from: accounts[0]
+        });
+
+        if(playersLength.length != 0){
+            assert(false);
+        }else{
+            assert(true);
+        }
+    })
 })
